@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Files
+.svg
+.slurm
+.out
+.txt
