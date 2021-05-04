@@ -48,16 +48,16 @@ def split_train_test(documents, prop = 0.2, path_output = './'):
 
         
 
-no_files = 20
+no_files = 100
 n_process = 20
 tileLen = 1000
 path_universe = './universe_tilelen{}.bed'.format(tileLen)
 universe = pybedtools.BedTool(path_universe)
 
 print(len(universe))
-file_list = list(pd.read_csv('file_list.txt', header = None, sep = ' ')[0])
+file_list = list(pd.read_csv('file_list_cell.txt', header = None, sep = ' ')[0])
 shuffle(file_list)
-for i in range(0, 20, no_files):
+for i in range(0, 100, no_files):
     print(i)
     
     trained_documents = []
@@ -73,7 +73,9 @@ for i in range(0, 20, no_files):
         
     print(len(trained_documents))
 
-    with open('./documentschunk{}_file{}_tilelen{}.txt'.format(int(i/no_files), no_files, tileLen),'w') as input_file:
+    with open('./documents_cell_chunk{}_file{}_tilelen{}.txt'.format(int(i/no_files), no_files, tileLen),'w') as input_file:
         input_file.write('\n'.join(trained_documents))
+    input_file.close()
     
+print(len(trained_documents))
 split_train_test(trained_documents, 0.2, './')
