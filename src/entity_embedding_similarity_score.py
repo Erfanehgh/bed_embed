@@ -54,20 +54,8 @@ def calculate_accuracy(X_query, X_label, y_label, y):
             distance.append((cosine_similarity(np.array(query).reshape(1, -1), np.array(X_label[j]).reshape(1, -1)))[0][0])
 
         label = y_label[np.argmax(distance)]
-
-#         print(label, y[i])
         if(label==y[i]):
             tp+=1
-        #     if((label==1) & (y[i] == 'train-hg38')):
-        # #         print(dist_hg19, dist_hg38)
-        #         j+=1
-
-        #     dis = list(tree.query(h19_query, k = 1))
-        #     if y_tree[dis[1]] in y[i]:
-        #         j+=1
-        #         print(y[i], y_tree[dis[1]])
-        #     [print(y[x]) for x in list(dis[1])]
-#         print(tp, i)
     return (tp/(i+1))
 
 def calculate_distance(X_files, X_labels, y_labels):

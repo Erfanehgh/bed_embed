@@ -11,7 +11,7 @@ python data_prepration.py
 ./Starspace/embed_doc ./train_teststarspace1574 ./test_documents20.txt > ./test_starspace_embed1574.txt
 
 python entity_embedding_visualization.py 
-python entity_embedding_accuracy.py 
+python entity_embedding_similarity_score.py 
 
 
 
