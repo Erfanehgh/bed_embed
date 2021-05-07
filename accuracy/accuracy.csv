@@ -1,0 +1,8 @@
+label,no_label,mode,no_files,accuracy
+assembly,2,train,320,1.0
+assembly,2,test,80,0.975
+cell,10,train,320,1.0
+cell,10,test,80,0.6625
+target,17,train,320,1.0
+target,17,test,80,0.7948717948717948
+

@@ -98,9 +98,6 @@ path_input = args.input_path
 path_output = args.output
 meta_data=args.meta_label
 
-print(path_output)
-
-
 
 universe = pybedtools.BedTool(path_universe)
 

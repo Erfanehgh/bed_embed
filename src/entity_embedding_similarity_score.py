@@ -90,6 +90,10 @@ parser.add_argument("-meta", "--meta_label", default='', type=str,
                         required=True,
                         help="The meta data type",)
 
+parser.add_argument("-mode", "--mode", default='', type=str,
+                        required=True,
+                        help="The meta data type",)
+
 # parser.add_argument("-plt", "--plot_type", default='', type=str,
 #                         required=True,
 #                         help="Type of the plot: [umap, t-sne, PCA]",)
@@ -111,6 +115,8 @@ path_document_embedding = args.input_path
 path_word_embedding = args.emb_path
 path_output = args.output
 meta_data=args.meta_label
+mode=args.mode
+
 
 
 X, y = data_preprocessing(path_document_embedding)
@@ -119,4 +125,4 @@ X_label, y_label = label_preprocessing(path_word_embedding, len(set(y)))
 print(calculate_accuracy(X, X_label, y_label, y))
 df_similarity = calculate_distance(X, X_label, y, y_label)
 
-df_similarity.to_csv(path_output+'similarity_score_{}.csv'.format(meta_data) , index = None)
+df_similarity.to_csv(path_output+'similarity_score_{}_{}.csv'.format(meta_data, mode) , index = None)

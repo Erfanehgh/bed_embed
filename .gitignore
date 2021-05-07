@@ -1,4 +1,5 @@
 *.slurm
+*.out
 
 # Jupyter Notebook
 .ipynb_checkpoints

@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+plt.rcParams["svg.fonttype"] = "none"
+plt.rcParams["text.usetex"] = False
+
 import pandas as pd
 import numpy as np
 import os
@@ -7,7 +11,6 @@ import pybedtools
 from random import shuffle
 import seaborn as sns
 import umap
-import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
@@ -125,6 +128,10 @@ parser.add_argument("-meta", "--meta_label", default='', type=str,
                         required=True,
                         help="The meta data type",)
 
+parser.add_argument("-mode", "--mode", default='', type=str,
+                        required=True,
+                        help="The meta data type",)
+
 args = parser.parse_args()
 
     
@@ -140,7 +147,7 @@ plot_type = args.plot_type
 nn = args.no_neighbours
 metric=args.metric
 meta_data=args.meta_label
-
+mode=args.mode
 
 
 X, y = data_preprocessing(path_document_embedding)
@@ -152,4 +159,4 @@ y.extend(y_label)
 
 fig = visulization(X, y, title = meta_data, plot_type = plot_type, n_neighbours = nn, metric = metric, filename = '', plottitle = 'Label', output_folder = path_output)
 # print(path_output+'plot_{}_nn{}_{}_{}.svg'.format(plot_type, nn, metric, meta_data))
-fig.savefig(path_output+'plot_{}_nn{}_{}_{}.svg'.format(plot_type, nn, metric, meta_data), format = 'svg')
+fig.savefig(path_output+'plot_{}_nn{}_{}_{}_{}.svg'.format(plot_type, nn, metric, meta_data, mode), format = 'svg')
