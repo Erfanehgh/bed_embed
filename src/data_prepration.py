@@ -12,7 +12,8 @@ from collections import Counter
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.model_selection import train_test_split
-
+from ubiquerg import VersionInHelpParser
+import argparse
 
 
 
@@ -26,7 +27,7 @@ def data_prepration(path_file_label):
             file_regions.columns = ['chrom', 'start', 'end']
             if(len(file_regions)==0):
                 return ' '
-            print(path_file_label)
+#             print(path_file_label)
             file_regions = (file_regions.to_dataframe().drop_duplicates())
             file_regions['region'] = file_regions['chrom'] + '_' + file_regions['start'].astype(str) + '_' + file_regions['end'].astype(str) 
             return ' '.join(list(file_regions['region']))+ ' __label__' + label
@@ -48,16 +49,59 @@ def split_train_test(documents, prop = 0.2, path_output = './'):
 
         
 
-no_files = 100
-n_process = 20
+        
+
+
+
+        
+
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument("-i", "--input_path", default=None, type=str,required=True, help="Path to input file.",)
+parser.add_argument("-univ", "--univ_path", default=None, type=str,
+                        required=True,
+                        help="Path to universe file.",)
+
+parser.add_argument("-nf", "--no_files", default=None, type=int,
+                        required=True,
+                        help="Number of files to read.",)
+
+parser.add_argument("-o", "--output", default='./', type=str,
+                        required=True,
+                        help="Path to output directory to store file.",)
+
+args = parser.parse_args()
+# print(args.input)
+
+
+# print(args.accumulate(args.integers))
+
+
+# no_files = 10
+# n_process = 20
 tileLen = 1000
-path_universe = './universe_tilelen{}.bed'.format(tileLen)
+# path_universe = './universe/universe_tilelen1000.bed'
+# path_input = './meta_data/file_list_cell.txt'
+# path_output = './'
+
+
+
+no_files = args.no_files
+n_process = 20
+path_universe = args.univ_path
+path_input = args.input_path
+path_output = args.output
+
+
+
+
 universe = pybedtools.BedTool(path_universe)
 
 print(len(universe))
-file_list = list(pd.read_csv('file_list_cell.txt', header = None, sep = ' ')[0])
+file_list = list(pd.read_csv(path_input, header = None, sep = ' ')[0])
 shuffle(file_list)
-for i in range(0, 100, no_files):
+for i in range(0, 20, no_files):
     print(i)
     
     trained_documents = []
@@ -73,7 +117,7 @@ for i in range(0, 100, no_files):
         
     print(len(trained_documents))
 
-    with open('./documents_cell_chunk{}_file{}_tilelen{}.txt'.format(int(i/no_files), no_files, tileLen),'w') as input_file:
+    with open(path_output + 'documents_cell_chunk{}_file{}_tilelen{}.txt'.format(int(i/no_files), no_files, tileLen),'w') as input_file:
         input_file.write('\n'.join(trained_documents))
     input_file.close()
     

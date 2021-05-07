@@ -12,6 +12,7 @@ from collections import Counter
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial import distance
 from sklearn.preprocessing import MinMaxScaler
+import argparse
 
 # Read txt file
 
@@ -71,15 +72,46 @@ def calculate_distance(X_files, X_labels, y_labels):
     return file_distance
     
 
+
     
+parser = argparse.ArgumentParser()
 
-path_document_embedding_train = './train_starspace_embed1574.txt'
-path_document_embedding_test = './test_starspace_embed1574.txt'
-path_word_embedding = './train_teststarspace1574.tsv'
+parser.add_argument("-i", "--input_path", default=None, type=str,required=True, help="Path to the input file.",)
+
+parser.add_argument("-emb", "--emb_path", default=None, type=str,
+                        required=True,
+                        help="Number of files to read.",)
+
+parser.add_argument("-o", "--output", default='./', type=str,
+                        required=True,
+                        help="Path to output directory to store similarity table.",)
+
+# parser.add_argument("-plt", "--plot_type", default='', type=str,
+#                         required=True,
+#                         help="Type of the plot: [umap, t-sne, PCA]",)
+
+# parser.add_argument("-nn", "--no_neighbours", default=2, type=str,
+#                         required=True,
+#                         help="Number of neighbours for umap and t-sne plot.",)
+
+# parser.add_argument("-metric", "--metric", default='cosine', type=str,
+#                         required=True,
+#                         help="Distance metric for the umap plot.",)
 
 
-X, y = data_preprocessing(path_document_embedding_train)
+args = parser.parse_args()
+
+
+
+path_document_embedding = args.input_path
+path_word_embedding = args.emb_path
+path_output = args.output
+
+
+X, y = data_preprocessing(path_document_embedding)
 X_label, y_label = label_preprocessing(path_word_embedding, len(set(y)))
 
 print(calculate_accuracy(X, X_label, y_label, y))
-calculate_distance(X, X_label, y_label)
+df_similarity = calculate_distance(X, X_label, y_label)
+
+df_similarity.to_csv(path_output + 'similarity_score.csv', index = None)
