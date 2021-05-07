@@ -66,7 +66,7 @@ def visulization(input_data, labels, title = '', plot_type = 'umap', n_neighbour
                             'dim 2':data[1],
                             title:[str(y1) for y1 in labels]})
 
-    data = data.sort_values(by = title)
+#     data = data.sort_values(by = title)
 #     print(data)
     fig, ax = plt.subplots(figsize=(12,12))
     
@@ -121,6 +121,9 @@ parser.add_argument("-metric", "--metric", default='cosine', type=str,
                         required=True,
                         help="Distance metric for the umap plot.",)
 
+parser.add_argument("-meta", "--meta_label", default='', type=str,
+                        required=True,
+                        help="The meta data type",)
 
 args = parser.parse_args()
 
@@ -136,6 +139,8 @@ path_output = args.output
 plot_type = args.plot_type
 nn = args.no_neighbours
 metric=args.metric
+meta_data=args.meta_label
+
 
 
 X, y = data_preprocessing(path_document_embedding)
@@ -145,5 +150,6 @@ X.extend(X_label)
 y.extend(y_label)
 
 
-fig = visulization(X, y, title = 'Cell', plot_type = plot_type, n_neighbours = nn, metric = metric, filename = '', plottitle = 'Label', output_folder = path_output)
-fig.savefig(path_output+'cell_cosine.svg', format = 'svg')
+fig = visulization(X, y, title = meta_data, plot_type = plot_type, n_neighbours = nn, metric = metric, filename = '', plottitle = 'Label', output_folder = path_output)
+# print(path_output+'plot_{}_nn{}_{}_{}.svg'.format(plot_type, nn, metric, meta_data))
+fig.savefig(path_output+'plot_{}_nn{}_{}_{}.svg'.format(plot_type, nn, metric, meta_data), format = 'svg')

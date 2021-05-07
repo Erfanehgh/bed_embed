@@ -38,12 +38,12 @@ def data_prepration(path_file_label):
         return ' '
     
     
-def split_train_test(documents, prop = 0.2, path_output = './'):
+def split_train_test(documents, prop = 0.2, path_output = './', meta = ''):
     shuffle(trained_documents)
     train_files, test_files = train_test_split(documents, test_size = prop, random_state = 42)
-    with open(path_output + 'train_documents{}.txt'.format(len(train_files)),'w') as input_file:
+    with open(path_output + 'train_documents_{}.txt'.format(meta),'w') as input_file:
         input_file.write('\n'.join(train_files))
-    with open(path_output + 'test_documents{}.txt'.format(len(test_files)),'w') as input_file:
+    with open(path_output + 'test_documents_{}.txt'.format(meta),'w') as input_file:
         input_file.write('\n'.join(test_files))
         
 
@@ -71,6 +71,10 @@ parser.add_argument("-o", "--output", default='./', type=str,
                         required=True,
                         help="Path to output directory to store file.",)
 
+parser.add_argument("-meta", "--meta_label", default='', type=str,
+                        required=True,
+                        help="The meta data type",)
+
 args = parser.parse_args()
 # print(args.input)
 
@@ -92,7 +96,9 @@ n_process = 20
 path_universe = args.univ_path
 path_input = args.input_path
 path_output = args.output
+meta_data=args.meta_label
 
+print(path_output)
 
 
 
@@ -101,25 +107,25 @@ universe = pybedtools.BedTool(path_universe)
 print(len(universe))
 file_list = list(pd.read_csv(path_input, header = None, sep = ' ')[0])
 shuffle(file_list)
-for i in range(0, 20, no_files):
-    print(i)
+# for i in range(0, 20, no_files):
+#     print(i)
     
-    trained_documents = []
-    with Pool(n_process) as p:
-        trained_documents = p.map(data_prepration, file_list[i:i+no_files])  
-        p.close()
-        p.join()
-    print(len(trained_documents))
-    print('Reading files done')
+trained_documents = []
+with Pool(n_process) as p:
+    trained_documents = p.map(data_prepration, file_list[0:no_files])  
+    p.close()
+    p.join()
+print(len(trained_documents))
+print('Reading files done')
 
-    while (' ' in trained_documents):
-        trained_documents.remove(' ')
+while (' ' in trained_documents):
+    trained_documents.remove(' ')
         
-    print(len(trained_documents))
+print(len(trained_documents))
 
-    with open(path_output + 'documents_cell_chunk{}_file{}_tilelen{}.txt'.format(int(i/no_files), no_files, tileLen),'w') as input_file:
-        input_file.write('\n'.join(trained_documents))
-    input_file.close()
+with open(path_output + 'documents_{}_file{}_tilelen{}.txt'.format(meta_data,no_files, tileLen),'w') as input_file:
+    input_file.write('\n'.join(trained_documents))
+input_file.close()
     
 print(len(trained_documents))
-split_train_test(trained_documents, 0.2, './')
+split_train_test(trained_documents, 0.2, path_output, meta_data)

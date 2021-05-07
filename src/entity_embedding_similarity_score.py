@@ -59,13 +59,13 @@ def calculate_accuracy(X_query, X_label, y_label, y):
             tp+=1
     return (tp/(i+1))
 
-def calculate_distance(X_files, X_labels, y_labels):
+def calculate_distance(X_files, X_labels, y, y_labels):
     X_files = np.array(X_files)
     X_labels = np.array(X_labels)
     distance_matrix = distance.cdist(X_files, X_labels, 'cosine')
     df_distance_matrix = pd.DataFrame(distance_matrix)
     df_distance_matrix.columns = y_label
-    df_distance_matrix['file_id'] = df_distance_matrix.index
+    df_distance_matrix['file_id'] = y #df_distance_matrix.index
     file_distance = pd.melt(df_distance_matrix, id_vars= 'file_id', var_name='search_term', value_name='score')
     scaler = MinMaxScaler()
     file_distance['score'] = scaler.fit_transform(np.array(file_distance['score']).reshape(-1,1))
@@ -85,6 +85,10 @@ parser.add_argument("-emb", "--emb_path", default=None, type=str,
 parser.add_argument("-o", "--output", default='./', type=str,
                         required=True,
                         help="Path to output directory to store similarity table.",)
+
+parser.add_argument("-meta", "--meta_label", default='', type=str,
+                        required=True,
+                        help="The meta data type",)
 
 # parser.add_argument("-plt", "--plot_type", default='', type=str,
 #                         required=True,
@@ -106,12 +110,13 @@ args = parser.parse_args()
 path_document_embedding = args.input_path
 path_word_embedding = args.emb_path
 path_output = args.output
+meta_data=args.meta_label
 
 
 X, y = data_preprocessing(path_document_embedding)
 X_label, y_label = label_preprocessing(path_word_embedding, len(set(y)))
 
 print(calculate_accuracy(X, X_label, y_label, y))
-df_similarity = calculate_distance(X, X_label, y_label)
+df_similarity = calculate_distance(X, X_label, y, y_label)
 
-df_similarity.to_csv(path_output + 'similarity_score.csv', index = None)
+df_similarity.to_csv(path_output+'similarity_score_{}.csv'.format(meta_data) , index = None)
