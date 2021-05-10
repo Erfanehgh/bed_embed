@@ -1,0 +1,15 @@
+pipeline_name: BEDEMBED
+pipeline_type: sample
+var_templates:
+  path: "{looper.piface_dir}/pipeline/bedembed.py"
+input_schema: ./bedembed_schema.yaml
+pre_submit:
+  python_functions:
+    - looper.write_sample_yaml
+command_template: >
+  {pipeline.var_templates.path}
+  --bedfile {sample.input_file_path}
+  --model {sample.star_space_model}
+  --sample-yaml {sample.yaml_file}
+  --doc_embed {sample.}
+  --label_embed {sample.}

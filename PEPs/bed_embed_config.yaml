@@ -1,0 +1,23 @@
+bed_embed_version: 0.0.0
+sample_table: bed_embed_annotation_sheet.csv
+
+looper:
+  output-dir: $BETUTORIAL/outputs/bed_embed_output/bed_embed_pipeline_logs #enviromential variable 
+
+sample_modifiers:
+  append:
+    bedbase_config: $BBTUTORIAL/bedbase/tutorial_files/bed_embed_configuration.yaml
+    pipeline_interfaces: $BBTUTORIAL/bed_embed/pipeline_interface_test.yaml
+    input_file_path: INPUT
+    star_space_model: MODEL
+    doc_embedding: DOCEMBED
+    label_embedding: LABELEMBED
+    yaml_file: SAMPLE_YAML
+  derive:
+    attributes: [star_space_model, yaml_file, embedding, iput_file_path]
+    sources:
+      INPUT: "/project/shefflab/data/encode/"
+      SAMPLE_YAML: "$BBTUTORIAL/outputs/bedstat_output/bedstat_pipeline_logs/submission/{sample_name}_sample.yaml"
+      MODEL: "$BBTUTORIAL/openSignalMatrix_{genome}_percentile99_01_quantNormalized_round4d.txt.gz" # path to the ss model
+      DOCEMBED: "$BBTUTORIAL/" #path to the 
+      LABELEMBED: "$path"

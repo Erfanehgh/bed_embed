@@ -11,16 +11,12 @@ path_output='./'
 no_files=10
 path_data='/project/shefflab/data/encode/'
 
-python ./src/data_prepration.py -i $path_input -path_data $path_data -univ $path_universe -nf $no_files -o $path_output -meta $meta
-
 
 # StarSpace Training
 
 path_embedded_documents_train=$path_output'train_starspace_embed_'$meta'.txt'
 path_embedded_labels=$path_output'starspace_model_'$meta'.tsv'
 
-
-# ./Starspace/starspace train -trainFile $path_output'documents_file'$no_files'_'$meta'.txt' -model $path_output/starspace_model_$meta -trainMode 0 -dim 50 -epoch 10 -negSearchLimit 5 -thread 20 -lr 0.001
 
 
 # Document Embedding
