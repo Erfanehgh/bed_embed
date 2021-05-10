@@ -17,7 +17,7 @@ import argparse
 
 def data_preprocessing(path_embeded_document):
     document_embedding = pd.read_csv(path_embeded_document, header = None)
-    print(len(document_embedding))
+    print((document_embedding))
     document_embedding = (document_embedding[0].str.split('__label__', expand = True))
     document_embedding[1] = document_embedding[1].shift(1)
     document_embedding = document_embedding[5:].dropna()
@@ -54,7 +54,8 @@ def calculate_accuracy(X_query, X_label, y_label, y):
             distance.append((cosine_similarity(np.array(query).reshape(1, -1), np.array(X_label[j]).reshape(1, -1)))[0][0])
 
         label = y_label[np.argmax(distance)]
-        if(label==y[i]):
+
+        if(label==y[i][0:-1]):
             tp+=1
     return (tp/(i+1))
 
@@ -132,6 +133,9 @@ X_label, y_label = label_preprocessing(path_word_embedding, len(set(y)))
 
 print(calculate_accuracy(X, X_label, y_label, y))
 df_similarity = calculate_distance(X, X_label, y, y_label)
-df_similarity['file_path']=pd.read_csv(path_filelist, nrows=no_files, header=None)
+
+
+df_similarity['file_path']=((list(pd.read_csv(path_filelist, nrows=no_files, header=None)[0])*len(set(y))))
+
 
 df_similarity.to_csv(path_output+'similarity_score_{}_{}.csv'.format(meta_data, mode) , index = None)

@@ -29,12 +29,12 @@ def data_prepration(path_file_label):
 #             print(path_file_label)
             file_regions = (file_regions.to_dataframe().drop_duplicates())
             file_regions['region'] = file_regions['chrom'] + '_' + file_regions['start'].astype(str) + '_' + file_regions['end'].astype(str) 
-            return ' '.join(list(file_regions['region']))+ ' __label__' + label
+            return path_file, ' '.join(list(file_regions['region']))+ ' __label__' + label
         except Exception:
                 print('Error in reading file: ', path_file)
-                return ' ' 
+                return path_file, ' ' 
     else:
-        return ' '
+        return path_file, ' '
         
 def split_train_test(documents, prop = 0.2, path_output = './', meta = ''):
     shuffle(trained_documents)
@@ -43,14 +43,6 @@ def split_train_test(documents, prop = 0.2, path_output = './', meta = ''):
         input_file.write('\n'.join(train_files))
     with open(path_output + 'test_documents_{}.txt'.format(meta),'w') as input_file:
         input_file.write('\n'.join(test_files))
-        
-
-        
-
-        
-
-
-
         
 
 
@@ -113,14 +105,19 @@ with Pool(n_process) as p:
 print(len(trained_documents))
 print('Reading files done')
 
-while (' ' in trained_documents):
-    trained_documents.remove(' ')
+df = pd.DataFrame(trained_documents, columns =['file_path', 'context'])
+print(df)
+
+df = df[df.context!=' ']
+
+# while (' ' in trained_documents):
+#     trained_documents.remove(' ')
         
 print(len(trained_documents))
 
-with open(path_output + 'documents_{}_file{}_tilelen{}.txt'.format(meta_data,no_files, tileLen),'w') as input_file:
-    input_file.write('\n'.join(trained_documents))
+with open(path_output + 'documents_file{}_{}.txt'.format(no_files,meta_data),'w') as input_file:
+    input_file.write('\n'.join(df.context))
 input_file.close()
     
 print(len(trained_documents))
-split_train_test(trained_documents, 0.0001, path_output, meta_data)
+# split_train_test(trained_documents, 0.0001, path_output, meta_data)
