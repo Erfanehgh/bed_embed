@@ -1,5 +1,10 @@
 *.slurm
 *.out
+*.txt
+*.svg
+*.csv
+starspace_model_target
+*.tsv
 
 # Jupyter Notebook
 .ipynb_checkpoints

@@ -16,7 +16,6 @@ from ubiquerg import VersionInHelpParser
 import argparse
 
 
-
 def data_prepration(path_file_label):
 #     print(path_file_label)
     path_file, label = path_file_label.split(',')
@@ -36,8 +35,7 @@ def data_prepration(path_file_label):
                 return ' ' 
     else:
         return ' '
-    
-    
+        
 def split_train_test(documents, prop = 0.2, path_output = './', meta = ''):
     shuffle(trained_documents)
     train_files, test_files = train_test_split(documents, test_size = prop, random_state = 42)
@@ -103,7 +101,7 @@ universe = pybedtools.BedTool(path_universe)
 
 print(len(universe))
 file_list = list(pd.read_csv(path_input, header = None, sep = ' ')[0])
-shuffle(file_list)
+# shuffle(file_list)
 # for i in range(0, 20, no_files):
 #     print(i)
     
@@ -125,4 +123,4 @@ with open(path_output + 'documents_{}_file{}_tilelen{}.txt'.format(meta_data,no_
 input_file.close()
     
 print(len(trained_documents))
-split_train_test(trained_documents, 0.2, path_output, meta_data)
+split_train_test(trained_documents, 0.0001, path_output, meta_data)

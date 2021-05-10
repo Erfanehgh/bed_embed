@@ -4,7 +4,6 @@ import os
 from multiprocessing import Pool
 import itertools
 import pybedtools
-from random import shuffle
 import seaborn as sns
 import umap
 import matplotlib.pyplot as plt
@@ -94,6 +93,12 @@ parser.add_argument("-mode", "--mode", default='', type=str,
                         required=True,
                         help="The meta data type",)
 
+parser.add_argument("-filelist", "--filelist", default=None, type=str,required=True, help="Path to the file list.",)
+
+parser.add_argument("-nf", "--no_files", default=None, type=int,
+                        required=True,
+                        help="Number of files to read.",)
+
 # parser.add_argument("-plt", "--plot_type", default='', type=str,
 #                         required=True,
 #                         help="Type of the plot: [umap, t-sne, PCA]",)
@@ -117,6 +122,9 @@ path_output = args.output
 meta_data=args.meta_label
 mode=args.mode
 
+no_files = args.no_files
+path_filelist=args.filelist
+
 
 
 X, y = data_preprocessing(path_document_embedding)
@@ -124,5 +132,6 @@ X_label, y_label = label_preprocessing(path_word_embedding, len(set(y)))
 
 print(calculate_accuracy(X, X_label, y_label, y))
 df_similarity = calculate_distance(X, X_label, y, y_label)
+df_similarity['file_path']=pd.read_csv(path_filelist, nrows=no_files, header=None)
 
 df_similarity.to_csv(path_output+'similarity_score_{}_{}.csv'.format(meta_data, mode) , index = None)
