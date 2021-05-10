@@ -115,10 +115,7 @@ df = pd.DataFrame(trained_documents, columns =['file_path', 'context'])
 
 
 df = df[df.context!=' ']
-
-# while (' ' in trained_documents):
-#     trained_documents.remove(' ')
-        
+      
 print(len(trained_documents))
 
 with open(path_output + 'documents_file{}_{}.txt'.format(no_files,meta_data),'w') as input_file:

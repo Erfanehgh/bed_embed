@@ -113,9 +113,6 @@ parser.add_argument("-nf", "--no_files", default=None, type=int,
 
 
 args = parser.parse_args()
-
-
-
 path_document_embedding = args.input_path
 path_word_embedding = args.emb_path
 path_output = args.output
@@ -123,7 +120,6 @@ meta_data=args.meta_label
 mode=args.mode
 no_files = args.no_files
 path_filelist=args.filelist
-
 
 
 X, y = data_preprocessing(path_document_embedding)
