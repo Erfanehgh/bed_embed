@@ -49,6 +49,11 @@ def split_train_test(documents, prop = 0.2, path_output = './', meta = ''):
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-i", "--input_path", default=None, type=str,required=True, help="Path to input file.",)
+
+parser.add_argument("-path_data", "--path_data", default='', type=str,
+                        required=True,
+                        help="The meta data type",)
+
 parser.add_argument("-univ", "--univ_path", default=None, type=str,
                         required=True,
                         help="Path to universe file.",)
@@ -84,6 +89,7 @@ tileLen = 1000
 no_files = args.no_files
 n_process = 20
 path_universe = args.univ_path
+path_data=args.path_data
 path_input = args.input_path
 path_output = args.output
 meta_data=args.meta_label
@@ -92,7 +98,7 @@ meta_data=args.meta_label
 universe = pybedtools.BedTool(path_universe)
 
 print(len(universe))
-file_list = list(pd.read_csv(path_input, header = None, sep = ' ')[0])
+file_list = list(path_data+pd.read_csv(path_input, header = None, sep = ' ')[0])
 # shuffle(file_list)
 # for i in range(0, 20, no_files):
 #     print(i)

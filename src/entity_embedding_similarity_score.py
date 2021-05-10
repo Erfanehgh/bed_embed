@@ -54,7 +54,7 @@ def calculate_accuracy(X_query, X_label, y_label, y):
 
         label = y_label[np.argmax(distance)]
 
-        if(label==y[i][0:-1]):
+        if(label==y[i]):
             tp+=1
     return (tp/(i+1))
 

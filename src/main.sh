@@ -9,8 +9,9 @@ path_input='./meta_data/file_list_'$meta'.txt'
 path_universe='/home/eg8qe/Desktop/gitHub/region2vec/StarSpaceEmbedding/universe_tilelen1000.bed'
 path_output='./'
 no_files=10
+path_data='/project/shefflab/data/encode/'
 
-python ./src/data_prepration.py -i $path_input -univ $path_universe -nf $no_files -o $path_output -meta $meta
+python ./src/data_prepration.py -i $path_input -path_data $path_data -univ $path_universe -nf $no_files -o $path_output -meta $meta
 
 
 # StarSpace Training
