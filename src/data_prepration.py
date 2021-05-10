@@ -106,7 +106,7 @@ print(len(trained_documents))
 print('Reading files done')
 
 df = pd.DataFrame(trained_documents, columns =['file_path', 'context'])
-print(df)
+
 
 df = df[df.context!=' ']
 

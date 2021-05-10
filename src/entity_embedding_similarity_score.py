@@ -17,7 +17,6 @@ import argparse
 
 def data_preprocessing(path_embeded_document):
     document_embedding = pd.read_csv(path_embeded_document, header = None)
-    print((document_embedding))
     document_embedding = (document_embedding[0].str.split('__label__', expand = True))
     document_embedding[1] = document_embedding[1].shift(1)
     document_embedding = document_embedding[5:].dropna()
@@ -65,8 +64,8 @@ def calculate_distance(X_files, X_labels, y, y_labels):
     distance_matrix = distance.cdist(X_files, X_labels, 'cosine')
     df_distance_matrix = pd.DataFrame(distance_matrix)
     df_distance_matrix.columns = y_label
-    df_distance_matrix['file_id'] = y #df_distance_matrix.index
-    file_distance = pd.melt(df_distance_matrix, id_vars= 'file_id', var_name='search_term', value_name='score')
+    df_distance_matrix['file_label'] = y #df_distance_matrix.index
+    file_distance = pd.melt(df_distance_matrix, id_vars= 'file_label', var_name='search_term', value_name='score')
     scaler = MinMaxScaler()
     file_distance['score'] = scaler.fit_transform(np.array(file_distance['score']).reshape(-1,1))
     return file_distance
@@ -122,7 +121,6 @@ path_word_embedding = args.emb_path
 path_output = args.output
 meta_data=args.meta_label
 mode=args.mode
-
 no_files = args.no_files
 path_filelist=args.filelist
 
@@ -135,7 +133,5 @@ print(calculate_accuracy(X, X_label, y_label, y))
 df_similarity = calculate_distance(X, X_label, y, y_label)
 
 
-df_similarity['file_path']=((list(pd.read_csv(path_filelist, nrows=no_files, header=None)[0])*len(set(y))))
-
-
-df_similarity.to_csv(path_output+'similarity_score_{}_{}.csv'.format(meta_data, mode) , index = None)
+df_similarity['filename']=((list(pd.read_csv(path_filelist, nrows=no_files, header=None, sep=',')[0])*len(set(y))))
+df_similarity[['filename', 'file_label', 'search_term', 'score']].to_csv(path_output+'similarity_score_{}_{}.csv'.format(meta_data, mode) , index = None)
